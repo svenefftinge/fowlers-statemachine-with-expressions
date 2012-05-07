@@ -1,0 +1,34 @@
+grammar org.xtext.example.mydsl.MyDsl with org.eclipse.xtext.xbase.Xbase
+
+generate myDsl "http://www.xtext.org/example/mydsl/MyDsl"
+
+Statemachine :
+     {Statemachine}
+	('events' 
+		events+=Event+ 
+	'end')?
+	('services'
+		services+=Service*
+	'end')?
+	states+=State*
+;
+
+Service :
+	type=JvmTypeReference name=ID
+;
+
+Event:
+	resetEvent?='reset'? name=ID 
+;
+
+State:
+	'state' name=ID
+		('do' action=XBlockExpression)?
+		transitions+=Transition*
+	'end'
+;
+
+Transition:
+	event=[Event] '=>' state=[State]
+;
+
